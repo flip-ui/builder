@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+html,
+body {
+	@apply h-full overflow-hidden;
+}
+
+:root [data-theme='vintage'] {
+	--theme-font-family-base: 'Custom', pixelify-sans;
+	--theme-font-family-heading: 'Custom', pixelify-sans;
+}
+
+@font-face {
+	font-family: 'pixelify-sans';
+	src: url('/PixelifySans.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
