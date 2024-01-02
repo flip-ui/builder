@@ -46,7 +46,7 @@
 		<h3 class="h3">Example:</h3>
 		<CodeBlock
 			language="rust"
-			code={`// Import the flip_ui
+			code={`// Import the flip_ui crate
 use flip_ui;
 
 fn main() {
