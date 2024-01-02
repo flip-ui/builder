@@ -46,12 +46,12 @@
 		<h3 class="h3">Example:</h3>
 		<CodeBlock
 			language="rust"
-			code={`// Import the flipperzero_ui_crate
-use flipperzero_ui_crate;
+			code={`// Import the flip_ui
+use flip_ui;
 
 fn main() {
 	// Load the exported UI JSON file
-	let ui = flipperzero_ui_crate::load_from_json("path/to/your/ui.json").expect("Failed to load UI");
+	let ui = flip_ui::load_from_json("path/to/your/ui.json").expect("Failed to load UI");
 
 	// Initialize the UI with the necessary variables and functions
 	// Replace \`your_function\` and \`your_variable\` with actual implementations
