@@ -97,7 +97,7 @@
 							{#if action?.event.type === EventType.View}
 								<input
 									type="number"
-									placeholder="Number of View"
+									placeholder="Number of View (leave blank for Closing the App)"
 									bind:value={action.event.data}
 									maxlength="10"
 								/>
@@ -119,13 +119,6 @@
 								<option value={EventType.Function}>Function</option>
 							</select>
 						</div>
-						<!-- <input
-							class="input"
-							type="text"
-							placeholder="View Number or Function Name with () for Params"
-							bind:value={action.event}
-							maxlength="40"
-						/> -->
 						<button
 							class="btn variant-filled"
 							on:click={() => (action = null)}
