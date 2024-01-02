@@ -22,14 +22,6 @@ export default {
 					{
 						name: 'vintage',
 						enhancements: true
-					},
-					{
-						name: 'wintry',
-						enhancements: true
-					},
-					{
-						name: 'crimson',
-						enhancements: true
 					}
 				]
 			}
