@@ -43,10 +43,27 @@
 			Simply include the crate in your project and load the JSON to render the UI components (don't
 			forget to pass in your functions and variables).
 		</p>
-		<h3 class="h3">Example (Deprecated):</h3>
+		<h3 class="h3">Example:</h3>
 		<CodeBlock
 			language="rust"
-			code={`// Import the crate\nuse flipperzero_ui_crate;\n// Load your JSON UI\nlet ui = flipperzero_ui_crate::load_from_json("path/to/your/ui.json");\n// Use the UI in your application\nui.init();`}
+			code={`// Import the flipperzero_ui_crate
+use flipperzero_ui_crate;
+
+fn main() {
+	// Load the exported UI JSON file
+	let ui = flipperzero_ui_crate::load_from_json("path/to/your/ui.json").expect("Failed to load UI");
+
+	// Initialize the UI with the necessary variables and functions
+	// Replace \`your_function\` and \`your_variable\` with actual implementations
+	ui.init_with(|builder| {
+		builder
+			.function("your_function_name", your_function)
+			.variable("your_variable_name", your_variable)
+	});
+
+	// Add application-specific logic here
+}
+`}
 		></CodeBlock>
 	</div>
 </div>
