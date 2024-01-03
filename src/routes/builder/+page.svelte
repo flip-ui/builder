@@ -3,6 +3,11 @@
 	import Grid from './Grid.svelte';
 </script>
 
+<svelte:head>
+	<title>Builder</title>
+	<meta name="description" content="Website's specific UI-Builder" />
+</svelte:head>
+
 <h2 class="h2 m-2">{$views.views.length != 0 ? `View ${$views.current + 1}` : 'No Views!'}</h2>
 <div
 	class="card p-4 m-2 {$views.views.length != 0
