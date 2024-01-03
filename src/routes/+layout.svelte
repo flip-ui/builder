@@ -87,6 +87,14 @@
 					href="/builder"
 					data-sveltekit-preload-data="hover">Builder</a
 				>
+				<a
+					class="btn w-12 hover:variant-soft-primary"
+					style="padding-top: 13px; padding-bottom: 13px;"
+					href="https://github.com/flip-ui/flip-ui.github.io/"
+					target="_blank"
+					rel="noreferrer"
+					><i class="fa-brands fa-github text-lg"></i>
+				</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
