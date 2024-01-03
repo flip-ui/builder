@@ -133,10 +133,10 @@
 							class="btn variant-filled"
 							on:click={() =>
 								(action = {
-									textValue: undefined,
+									textValue: '(Edit Text)',
 									event: {
 										type: EventType.View,
-										data: undefined
+										data: ''
 									}
 								})}><i class="fa-solid fa-plus mr-2"></i> Add Action</button
 						>

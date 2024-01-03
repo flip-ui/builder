@@ -128,7 +128,7 @@
 								{#each item.data.actions as action}
 									{#if action}
 										<span
-											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled flex-nowrap flex truncate h-fit lg:text-base text-xs"
+											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled truncate h-fit lg:text-base text-xs"
 										>
 											{action.textValue}
 											{#if action.event}
