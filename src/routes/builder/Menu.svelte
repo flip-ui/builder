@@ -54,7 +54,7 @@
 				return {
 					name: 'Header',
 					w: 20,
-					h: 1,
+					h: 2,
 					x: undefined,
 					y: undefined,
 					moveable: true,
@@ -65,7 +65,7 @@
 				return {
 					name: 'Body Text',
 					w: 20,
-					h: 1,
+					h: 2,
 					x: undefined,
 					y: undefined,
 					moveable: true,
@@ -76,9 +76,9 @@
 				return {
 					name: 'Buttons',
 					w: 20,
-					h: 1,
+					h: 2,
 					x: 0,
-					y: 9,
+					y: 8,
 					moveable: false,
 					textValue: null,
 					actions: [null, null, null]
@@ -307,7 +307,8 @@
 							</button>
 							{#if del}
 								<button
-									class="ml-1 btn-icon w-8 h-8 variant-filled-error place-self-center"
+									class="ml-1 btn w-8 variant-filled-error place-self-center"
+									style="padding-top: 13px; padding-bottom: 13px;"
 									on:click={() => {
 										if (del) del(id ?? '');
 									}}><i class="fa-solid fa-delete-left"></i></button

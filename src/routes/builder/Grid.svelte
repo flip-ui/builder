@@ -84,25 +84,19 @@
 				>
 					{#if item.type == GuiType.Header}
 						{#if typeof item.data.textValue == 'object'}
-							{#if item.data.textValue?.text}
-								<div
-									class="flex {verticalAlign(item.data.textValue?.vertical)} {horizontalAlign(
-										item.data.textValue?.horizontal
-									)} h-full"
-								>
-									<h2 class="h2 truncate">
+							<div
+								class="flex {!item.data.textValue?.text ? 'opacity-30' : ''} {verticalAlign(
+									item.data.textValue?.vertical || GuiAlign.Top
+								)} {horizontalAlign(item.data.textValue?.horizontal || GuiAlign.Left)} h-full"
+							>
+								<h2 class="lg:h2 h3 truncate">
+									{#if item.data.textValue?.text}
 										{item.data.textValue.text}
-									</h2>
-								</div>
-							{:else}
-								<div
-									class="flex opacity-30 {verticalAlign(
-										item.data.textValue?.vertical || GuiAlign.Top
-									)} {horizontalAlign(item.data.textValue?.horizontal || GuiAlign.Left)} h-full"
-								>
-									<h2 class="h2 truncate">Unset</h2>
-								</div>
-							{/if}
+									{:else}
+										Unset
+									{/if}
+								</h2>
+							</div>
 						{:else}
 							<p class="truncate">
 								TypeError: Mismatched Type. Please delete this Element and put in a new one!
@@ -110,25 +104,19 @@
 						{/if}
 					{:else if item.type == GuiType.BodyText}
 						{#if typeof item.data.textValue == 'object'}
-							{#if item.data.textValue?.text}
-								<div
-									class="flex {verticalAlign(item.data.textValue?.vertical)} {horizontalAlign(
-										item.data.textValue?.horizontal
-									)} h-full"
-								>
-									<p class="truncate">
+							<div
+								class="flex {!item.data.textValue?.text ? 'opacity-30' : ''} {verticalAlign(
+									item.data.textValue?.vertical || GuiAlign.Top
+								)} {horizontalAlign(item.data.textValue?.horizontal || GuiAlign.Left)} h-full"
+							>
+								<p class="lg:text-base text-xs truncate">
+									{#if item.data.textValue?.text}
 										{item.data.textValue.text}
-									</p>
-								</div>
-							{:else}
-								<div
-									class="flex opacity-30 {verticalAlign(
-										item.data.textValue?.vertical || GuiAlign.Top
-									)} {horizontalAlign(item.data.textValue?.horizontal || GuiAlign.Left)} h-full"
-								>
-									<p class="truncate">Unset</p>
-								</div>
-							{/if}
+									{:else}
+										Unset
+									{/if}
+								</p>
+							</div>
 						{:else}
 							<p class="truncate">
 								TypeError: Mismatched Type. Please delete this Element and put in a new one!
@@ -140,19 +128,19 @@
 								{#each item.data.actions as action}
 									{#if action}
 										<span
-											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled flex-nowrap flex truncate h-fit"
+											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled flex-nowrap flex truncate h-fit lg:text-base text-xs"
 										>
 											{action.textValue}
 											{#if action.event}
 												<span
-													class="ml-2 badge variant-filled-tertiary z-10 place-self-center truncate"
+													class="ml-2 badge variant-filled-tertiary z-10 place-self-center truncate lg:text-base text-xs"
 													>{action.event.type}</span
 												>
 											{/if}
 										</span>
 									{:else}
 										<span
-											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled opacity-30 truncate h-fit"
+											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled opacity-30 truncate h-fit lg:text-base text-xs"
 											>Unset</span
 										>
 									{/if}
@@ -161,23 +149,26 @@
 						{/if}
 					{:else if item.type == GuiType.Alert}
 						{#if item.data.textValue}
-							<p class="truncate">{item.data.textValue}</p>
+							<p class="truncate lg:text-base text-xs">{item.data.textValue}</p>
 						{:else}
-							<p class="opacity-30 truncate">Unset</p>
+							<p class="opacity-30 truncate lg:text-base text-xs">Unset</p>
 						{/if}
 						<div class="flex justify-center items-end h-full">
 							{#if item.data.actions && item.data.actions[0]}
-								<span class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled truncate h-fit mb-8">
+								<span
+									class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled truncate h-fit mb-8 lg:text-base text-xs"
+								>
 									{item.data.actions[0].textValue}
 									{#if item.data.actions[0].event}
-										<span class="ml-2 badge variant-filled-tertiary z-10 place-self-center truncate"
+										<span
+											class="ml-2 badge variant-filled-tertiary z-10 place-self-center truncate lg:text-base text-xs"
 											>{item.data.actions[0].event.type}</span
 										>
 									{/if}
 								</span>
 							{:else}
 								<span
-									class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled opacity-30 truncate h-fit mb-8"
+									class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled opacity-30 truncate h-fit mb-8 lg:text-base text-xs"
 									>Unset</span
 								>
 							{/if}
@@ -190,13 +181,13 @@
 					{/if}
 					<span class="badge variant-filled absolute -top-4 -left-4 z-[2]">{item.name}</span>
 					<button
-						class="btn w-8 h-[24px] pt-1 pb-1 pr-2 pl-2 variant-filled-primary absolute -top-4 right-8 z-[2]"
+						class="btn w-8 h-[24px] pt-1 pb-1 pr-2 pl-2 variant-filled-primary absolute -top-4 right-8 z-[99]"
 						title="Edit"
 						on:click={() => editItem(item)}
 						on:pointerdown={(e) => e.stopPropagation()}><i class="fa-solid fa-pen"></i></button
 					>
 					<button
-						class="btn w-8 h-[24px] pt-1 pb-1 pr-2 pl-2 variant-filled-error absolute -top-4 -right-4 z-[2]"
+						class="btn w-8 h-[24px] pt-1 pb-1 pr-2 pl-2 variant-filled-error absolute -top-4 -right-4 z-[99]"
 						title="Delete"
 						on:click={() => deleteItem(item.id)}
 						on:pointerdown={(e) => e.stopPropagation()}
