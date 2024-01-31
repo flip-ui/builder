@@ -8,9 +8,9 @@
 	<meta name="description" content="Website's specific UI-Builder" />
 </svelte:head>
 
-<h2 class="h2 m-2">{$views.views.length != 0 ? `View ${$views.current + 1}` : 'No Views!'}</h2>
+<h2 class="h2 m-2">{$views.pages.length != 0 ? `View ${$views.current + 1}` : 'No Views!'}</h2>
 <div
-	class="card p-4 m-2 {$views.views.length != 0
+	class="card p-4 m-2 {$views.pages.length != 0
 		? 'variant-ghost-primary'
 		: 'variant-ghost'} overflow-hidden"
 >

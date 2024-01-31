@@ -1,106 +1,102 @@
 <script lang="ts">
 	import { gridController, views } from '$lib/stores';
 	import { AppRail, AppRailAnchor, AppRailTile, getDrawerStore } from '@skeletonlabs/skeleton';
-	import {
-		GuiAlign,
-		type AlignedText,
-		GuiType,
-		type Actions,
-		type Option,
-		type Views,
-		EventType
-	} from './../../lib/types';
+	import { Align, GuiType, type Option, type Views, type Data, type View } from './../../lib/types';
 	import { areItemsColliding } from '$lib/utils';
 
 	const drawerStore = getDrawerStore();
 
 	let currentTile: number = 0;
 
-	function addNewItem(type: GuiType) {
-		const { name, w, h, x, y, moveable, actions, textValue } = matchTypes(type);
-		const newPosition =
-			x || y ? { x: x ?? w, y: y ?? h } : $gridController.getFirstAvailablePosition(w, h);
+	function addNewView(type: GuiType) {
+		let newView = matchTypes(type);
 
-		const newItem = {
-			id: crypto.randomUUID(),
-			x: newPosition?.x ?? 0,
-			y: newPosition?.y ?? 0,
-			w,
-			h,
-			type,
-			name,
-			moveable,
-			data: { textValue, actions }
-		};
+		const pos = $gridController.getFirstAvailablePosition(newView.w, newView.h);
+		if (newView.x == 0) newView.x = pos?.x || 0;
+		if (newView.y == 0) newView.y = pos?.y || 0;
 
-		if (!areItemsColliding(newItem, $views.views[$views.current].rows))
-			$views.views[$views.current].rows = newPosition
-				? [...$views.views[$views.current].rows, newItem]
-				: $views.views[$views.current].rows;
+		if (!areItemsColliding(newView, $views.pages[$views.current].page)) {
+			$views.pages[$views.current].page.push(newView);
+			$views.pages[$views.current] = $views.pages[$views.current];
+		}
 	}
 
-	function matchTypes(type: GuiType): {
-		name: string;
-		w: number;
-		h: number;
-		x: number | undefined;
-		y: number | undefined;
-		textValue: Option<string | AlignedText>;
-		actions: Option<Option<Actions>[]>;
-		moveable: boolean;
-	} {
+	function matchTypes(type: GuiType): View {
 		switch (type) {
 			case GuiType.Header:
 				return {
+					id: crypto.randomUUID(),
 					name: 'Header',
+					type: GuiType.Header,
 					w: 20,
 					h: 2,
-					x: undefined,
-					y: undefined,
+					x: 0,
+					y: 0,
 					moveable: true,
-					textValue: { text: '', horizontal: GuiAlign.Left, vertical: GuiAlign.Center },
-					actions: null
+					data: {
+						text_value: '',
+						horizontal: Align.Left,
+						vertical: Align.Center,
+						actions: null
+					}
 				};
 			case GuiType.BodyText:
 				return {
+					id: crypto.randomUUID(),
 					name: 'Body Text',
+					type: GuiType.BodyText,
 					w: 20,
 					h: 2,
-					x: undefined,
-					y: undefined,
+					x: 0,
+					y: 0,
 					moveable: true,
-					textValue: { text: '', horizontal: GuiAlign.Left, vertical: GuiAlign.Center },
-					actions: null
+					data: {
+						text_value: '',
+						horizontal: Align.Left,
+						vertical: Align.Center,
+						actions: null
+					}
 				};
 			case GuiType.Buttons:
 				return {
+					id: crypto.randomUUID(),
 					name: 'Buttons',
+					type: GuiType.Buttons,
 					w: 20,
 					h: 2,
 					x: 0,
 					y: 8,
 					moveable: false,
-					textValue: null,
-					actions: [null, null, null]
+					data: {
+						text_value: null,
+						horizontal: null,
+						vertical: null,
+						actions: [null, null, null]
+					}
 				};
 			case GuiType.Alert:
 				return {
+					id: crypto.randomUUID(),
 					name: 'Alert',
+					type: GuiType.Alert,
 					w: 20,
 					h: 10,
 					x: 0,
 					y: 0,
 					moveable: false,
-					textValue: '',
-					actions: [
-						{
-							textValue: 'Ok',
-							event: {
-								type: EventType.View,
-								data: undefined
+					data: {
+						text_value: null,
+						horizontal: null,
+						vertical: null,
+						actions: [
+							{
+								text_value: 'Ok',
+								event: {
+									View: 0
+								}
 							}
-						}
-					]
+						]
+					}
 				};
 		}
 	}
@@ -113,7 +109,7 @@
 		select: () => void;
 		del: (id: string) => void;
 	}[] {
-		return views.views.map((view, index) => ({
+		return views.pages.map((view, index) => ({
 			id: view.id,
 			label: index + 1,
 			badge: views.current == index ? 'current' : undefined,
@@ -123,8 +119,8 @@
 				$views = views;
 			},
 			del: (id: string) => {
-				if ($views.current != 0 && $views.views.length - 1 <= $views.current) $views.current -= 1;
-				$views.views = views.views.filter((item) => item.id !== id);
+				if ($views.current != 0 && $views.pages.length - 1 <= $views.current) $views.current -= 1;
+				$views.pages = views.pages.filter((item) => item.id !== id);
 			}
 		}));
 	}
@@ -142,8 +138,8 @@
 
 	$: disabled = (views: Views, type: GuiType | undefined) => {
 		return (
-			views.views.length == 0 ||
-			(views.views[views.current].rows.find((item) => item.type === type) != undefined ?? true)
+			views.pages.length == 0 ||
+			(views.pages[views.current].page.find((view) => view.type === type) != undefined ?? true)
 		);
 	};
 	$: submenu = [
@@ -156,7 +152,7 @@
 					label: 'Header',
 					badge: 'Moveable',
 					disabled: disabled($views, GuiType.Header),
-					select: () => addNewItem(GuiType.Header),
+					select: () => addNewView(GuiType.Header),
 					del: undefined
 				},
 				{
@@ -164,7 +160,7 @@
 					label: 'Body Text',
 					badge: 'Moveable',
 					disabled: disabled($views, GuiType.BodyText),
-					select: () => addNewItem(GuiType.BodyText),
+					select: () => addNewView(GuiType.BodyText),
 					del: undefined
 				},
 				{
@@ -172,7 +168,7 @@
 					label: 'Buttons',
 					badge: 'Fixed',
 					disabled: disabled($views, GuiType.Buttons),
-					select: () => addNewItem(GuiType.Buttons),
+					select: () => addNewView(GuiType.Buttons),
 					del: undefined
 				}
 			]
@@ -186,7 +182,7 @@
 					label: 'Alert',
 					badge: 'Fixed',
 					disabled: disabled($views, GuiType.Alert),
-					select: () => addNewItem(GuiType.Alert),
+					select: () => addNewView(GuiType.Alert),
 					del: undefined
 				},
 				{
@@ -238,7 +234,7 @@
 					badge: undefined,
 					disabled: undefined,
 					select: () => {
-						$views.views.push({ rows: [], id: crypto.randomUUID() });
+						$views.pages.push({ page: [], id: crypto.randomUUID() });
 						$views = $views;
 					},
 					del: undefined

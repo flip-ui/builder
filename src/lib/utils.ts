@@ -1,4 +1,4 @@
-import type { Item } from './types';
+import type { View } from './types';
 
 export function keys<T extends object>(obj: T) {
 	return Object.keys(obj) as Array<keyof T>;
@@ -39,7 +39,7 @@ export function areObjectsEqual(obj1: any, obj2: any): boolean {
 	return true;
 }
 
-export function isItemColliding(item: Item, otherItem: Item) {
+export function isItemColliding(item: View, otherItem: View) {
 	return (
 		item.id !== otherItem.id &&
 		item.x <= otherItem.x + otherItem.w - 1 &&
@@ -49,7 +49,7 @@ export function isItemColliding(item: Item, otherItem: Item) {
 	);
 }
 
-export function areItemsColliding(item: Item, items: Item[]) {
+export function areItemsColliding(item: View, items: View[]) {
 	for (const item2 of items) {
 		if (isItemColliding(item, item2)) return true;
 	}

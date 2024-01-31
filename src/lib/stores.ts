@@ -4,4 +4,4 @@ import type { Views } from './types';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 
 export let gridController = writable<GridController>();
-export let views = localStorageStore<Views>('views', { views: [], current: 0 });
+export let views = localStorageStore<Views>('views', { pages: [], current: 0 });

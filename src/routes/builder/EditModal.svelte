@@ -3,7 +3,7 @@
 	// Stores
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { views } from '$lib/stores';
-	import { EventType, GuiAlign, GuiType, type Item } from '$lib/types';
+	import { Align, alignToString, GuiType, type View, type Action } from '$lib/types';
 
 	// Props
 	/** Exposes parent props to this component. */
@@ -14,12 +14,15 @@
 	const cBase = 'card p-4 w-modal shadow-xl space-y-4';
 	const cHeader = 'text-2xl font-bold';
 
-	let item: Item = $modalStore[0]?.meta.toChange;
+	let view: View = $modalStore[0]?.meta.toChange;
 
 	// apply reactivity on close
 	modalStore.subscribe((modals: ModalSettings[]) => {
 		if (!modals.length) $views = $views;
 	});
+
+	// select shenanigans
+	let ev = new Array(view.data.actions?.length).fill('view');
 </script>
 
 <!-- @component This is an Edit Modal for the Items. -->
@@ -28,101 +31,86 @@
 	<div class={cBase}>
 		<header class={cHeader}>Edit</header>
 
-		{#if item.data.textValue != null}
-			{#if typeof item.data.textValue == 'string'}
+		{#if view.data.text_value != null}
+			{#if typeof view.data.text_value == 'string'}
 				<label class="label">
 					<span>Edit Text</span>
 					<input
 						class="input"
 						type="text"
 						placeholder="Text Value and/or Variable using {'{'}var_name{'}'}"
-						bind:value={item.data.textValue}
+						bind:value={view.data.text_value}
 						maxlength="70"
 					/>
 				</label>
-			{:else if typeof item.data.textValue == 'object'}
-				<label class="label">
-					<span>Edit Text</span>
-					<input
-						class="input"
-						type="text"
-						placeholder="Text Value and/or Variable using {'{'}var_name{'}'}"
-						bind:value={item.data.textValue.text}
-						maxlength="70"
-					/>
-				</label>
+			{/if}
+			{#if view.data.horizontal != null && view.data.vertical != null}
 				<label class="label">
 					<span>Horizontal Align</span>
-					<select class="select" bind:value={item.data.textValue.horizontal}>
-						{#each Object.values(GuiAlign).filter((value) => typeof value === 'string') as align}
-							<option value={align}>{align.charAt(0).toUpperCase() + align.slice(1)}</option>
+					<select class="select" bind:value={view.data.horizontal}>
+						{#each Object.values(Align).filter((value) => typeof value === 'number') as align}
+							<option value={align}>{alignToString(align)}</option>
 						{/each}
 					</select>
 				</label>
 				<label class="label">
 					<span>Vertical Align</span>
-					<select class="select" bind:value={item.data.textValue.vertical}>
-						{#each Object.values(GuiAlign).filter((value) => typeof value === 'string') as align}
-							<option value={align}>{align.charAt(0).toUpperCase() + align.slice(1)}</option>
+					<select class="select" bind:value={view.data.vertical}>
+						{#each Object.values(Align).filter((value) => typeof value === 'number') as align}
+							<option value={align}>{alignToString(align)}</option>
 						{/each}
 					</select>
 				</label>
-			{:else}
-				<aside class="alert variant-ghost">
-					<div class="alert-message">
-						<h3 class="h3">Critical Error!</h3>
-						<p>
-							Wrong provided Type found! Please re-add the item. If the issue persists, feel free to
-							open an issue on GitHub!
-						</p>
-					</div>
-				</aside>
 			{/if}
 		{/if}
 
-		{#if item.data.actions != null}
-			{#each item.data.actions as action, i}
+		{#if view.data.actions != null}
+			{#each view.data.actions as action, i}
 				{#if action != null}
 					<label class="label">
 						<span>Action {i + 1}</span>
 						<input
 							class="input"
 							type="text"
-							disabled={item.type == GuiType.Alert}
+							disabled={view.type == GuiType.Alert}
 							placeholder="Text Value and/or Variable using {'{'}var_name{'}'}"
-							bind:value={action.textValue}
+							bind:value={action.text_value}
 							maxlength="40"
 						/>
 						<div class="input-group input-group-divider grid-cols-[1fr_auto]">
-							{#if action?.event.type === EventType.View}
+							{#if 'View' in action.event}
 								<input
 									type="number"
 									placeholder="Number of View (leave blank for Closing the App)"
-									bind:value={action.event.data}
+									bind:value={action.event.View}
 									maxlength="10"
 								/>
 							{:else}
 								<input
 									type="text"
 									placeholder="Function Name with () for Params"
-									bind:value={action.event.data}
+									bind:value={action.event.Function}
 									maxlength="40"
 								/>
 							{/if}
 							<select
-								bind:value={action.event.type}
+								bind:value={ev[i]}
 								on:change={() => {
-									if (action) action.event.data = undefined;
+									if (ev[i] === 'view') {
+										if (action) action.event = { View: 1 };
+									} else if (ev[i] === 'function') {
+										if (action) action.event = { Function: '' };
+									}
 								}}
 							>
-								<option value={EventType.View}>View</option>
-								<option value={EventType.Function}>Function</option>
+								<option value={'view'}>View</option>
+								<option value={'function'}>Function</option>
 							</select>
 						</div>
 						<button
 							class="btn variant-filled"
 							on:click={() => (action = null)}
-							disabled={item.type == GuiType.Alert}
+							disabled={view.type == GuiType.Alert}
 							><i class="fa-solid fa-minus mr-2"></i>Remove Action</button
 						>
 					</label>
@@ -131,14 +119,12 @@
 						<div>Action {i + 1}</div>
 						<button
 							class="btn variant-filled"
-							on:click={() =>
-								(action = {
-									textValue: '(Edit Text)',
-									event: {
-										type: EventType.View,
-										data: ''
-									}
-								})}><i class="fa-solid fa-plus mr-2"></i> Add Action</button
+							on:click={() => {
+								action = {
+									text_value: '',
+									event: { View: 1 }
+								};
+							}}><i class="fa-solid fa-plus mr-2"></i> Add Action</button
 						>
 					</label>
 				{/if}

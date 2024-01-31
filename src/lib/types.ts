@@ -1,56 +1,75 @@
-export enum GuiType {
-	Header = 'header',
-	BodyText = 'body-text',
-	Buttons = 'buttons',
-	Alert = 'alert'
-}
-
-export enum GuiAlign {
-	Left = 'left',
-	Right = 'right',
-	Top = 'top',
-	Bottom = 'bottom',
-	Center = 'center'
-}
-
-export enum EventType {
-	View = 'view',
-	Function = 'function'
-}
-
 export type Option<T> = T | null;
-export type IdArray<T> = { rows: T[]; id: string }[];
-export type EventData<T extends EventType> = T extends EventType.View ? number : string;
+
+export enum GuiType {
+	Header = 0,
+	BodyText,
+	Buttons,
+	Alert
+}
+
+export enum Align {
+	Left = 0,
+	Right,
+	Top,
+	Bottom,
+	Center
+}
+
+export function alignToString(align: Align | string): string {
+	switch (align) {
+		case Align.Left:
+			return 'Left';
+		case Align.Right:
+			return 'Right';
+		case Align.Top:
+			return 'Top';
+		case Align.Bottom:
+			return 'Bottom';
+		case Align.Center:
+			return 'Center';
+		default:
+			throw new Error('Invalid Align value');
+	}
+}
+
+export type Event =
+	| {
+			View: number;
+	  }
+	| {
+			Function: string;
+	  };
 
 export interface Views {
-	views: IdArray<Item>;
+	pages: Page[];
 	current: number;
 }
 
-export interface Item {
+export interface Page {
 	id: string;
-	type: GuiType;
+	page: View[];
+}
+
+export interface View {
+	id: string;
 	name: string;
+	type: GuiType;
 	moveable: boolean;
 	x: number;
 	y: number;
 	w: number;
 	h: number;
-	data: { textValue: Option<string | AlignedText>; actions: Option<Option<Actions>[]> };
+	data: Data;
 }
 
-export interface AlignedText {
-	horizontal: GuiAlign;
-	vertical: GuiAlign;
-	text: string;
+export interface Data {
+	text_value: Option<String>;
+	horizontal: Option<Align>;
+	vertical: Option<Align>;
+	actions: Option<Option<Action>[]>;
 }
 
-export interface Actions {
-	textValue: string | undefined;
+export interface Action {
+	text_value: String;
 	event: Event;
-}
-
-export interface Event {
-	type: EventType;
-	data: EventData<EventType> | undefined;
 }

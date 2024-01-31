@@ -5,18 +5,18 @@
 	import { keys } from '$lib/utils';
 	import { Grid, GridItem } from 'svelte-grid-extended';
 	import { gridController, views } from '$lib/stores';
-	import { GuiAlign, GuiType, type Item } from '$lib/types';
+	import { Align, GuiType, type View } from '$lib/types';
 
 	const modalStore = getModalStore();
 
 	function deleteItem(id: string) {
-		$views.views[$views.current].rows = $views.views[$views.current].rows.filter(
-			(item: { id: string }) => item.id !== id
+		$views.pages[$views.current].page = $views.pages[$views.current].page.filter(
+			(view: { id: string }) => view.id !== id
 		);
 		$views = $views;
 	}
 
-	function editItem(toChange: Item) {
+	function editItem(toChange: View) {
 		const modal: ModalSettings = {
 			type: 'component',
 			component: 'editModal',
@@ -28,31 +28,31 @@
 		modalStore.trigger(modal);
 	}
 
-	$: verticalAlign = (align: GuiAlign) => {
+	$: verticalAlign = (align: Align) => {
 		switch (align) {
-			case GuiAlign.Left:
+			case Align.Left:
 				return '';
-			case GuiAlign.Right:
+			case Align.Right:
 				return '';
-			case GuiAlign.Top:
+			case Align.Top:
 				return 'items-start';
-			case GuiAlign.Bottom:
+			case Align.Bottom:
 				return 'items-end';
-			case GuiAlign.Center:
+			case Align.Center:
 				return 'items-center';
 		}
 	};
-	$: horizontalAlign = (align: GuiAlign) => {
+	$: horizontalAlign = (align: Align) => {
 		switch (align) {
-			case GuiAlign.Left:
+			case Align.Left:
 				return 'justify-start';
-			case GuiAlign.Right:
+			case Align.Right:
 				return 'justify-end';
-			case GuiAlign.Top:
+			case Align.Top:
 				return '';
-			case GuiAlign.Bottom:
+			case Align.Bottom:
 				return '';
-			case GuiAlign.Center:
+			case Align.Center:
 				return 'justify-center';
 		}
 	};
@@ -67,74 +67,62 @@
 	bind:controller={$gridController}
 	class="z-[1]"
 >
-	{#if $views.views[$views.current]}
-		{#each $views.views[$views.current].rows as item (item.id)}
+	{#if $views.pages[$views.current]}
+		{#each $views.pages[$views.current].page as view (view.id)}
 			<div transition:fade={{ duration: 300 }}>
 				<GridItem
 					previewClass="transition-all duration-200 variant-glass rounded-md"
 					activeClass="z-[2]"
-					id={item.id}
-					bind:x={item.x}
-					bind:y={item.y}
-					bind:w={item.w}
-					bind:h={item.h}
-					movable={item.moveable}
+					id={view.id}
+					bind:x={view.x}
+					bind:y={view.y}
+					bind:w={view.w}
+					bind:h={view.h}
+					movable={view.moveable}
 					resizable={false}
 					class="pt-2 pb-2 pr-5 pl-5 rounded-md variant-glass"
 				>
-					{#if item.type == GuiType.Header}
-						{#if typeof item.data.textValue == 'object'}
-							<div
-								class="flex {!item.data.textValue?.text ? 'opacity-30' : ''} {verticalAlign(
-									item.data.textValue?.vertical || GuiAlign.Top
-								)} {horizontalAlign(item.data.textValue?.horizontal || GuiAlign.Left)} h-full"
-							>
-								<h2 class="lg:h2 h3 truncate">
-									{#if item.data.textValue?.text}
-										{item.data.textValue.text}
-									{:else}
-										Unset
-									{/if}
-								</h2>
-							</div>
-						{:else}
-							<p class="truncate">
-								TypeError: Mismatched Type. Please delete this Element and put in a new one!
+					{#if view.type == GuiType.Header}
+						<div
+							class="flex {!view.data.text_value ? 'opacity-30' : ''} {verticalAlign(
+								view.data.vertical || Align.Top
+							)} {horizontalAlign(view.data.horizontal || Align.Left)} h-full"
+						>
+							<h2 class="lg:h2 h3 truncate">
+								{#if view.data.text_value}
+									{view.data.text_value}
+								{:else}
+									Unset
+								{/if}
+							</h2>
+						</div>
+					{:else if view.type == GuiType.BodyText}
+						<div
+							class="flex {!view.data.text_value ? 'opacity-30' : ''} {verticalAlign(
+								view.data.vertical || Align.Top
+							)} {horizontalAlign(view.data.horizontal || Align.Left)} h-full"
+						>
+							<p class="lg:text-base text-xs truncate">
+								{#if view.data.text_value}
+									{view.data.text_value}
+								{:else}
+									Unset
+								{/if}
 							</p>
-						{/if}
-					{:else if item.type == GuiType.BodyText}
-						{#if typeof item.data.textValue == 'object'}
-							<div
-								class="flex {!item.data.textValue?.text ? 'opacity-30' : ''} {verticalAlign(
-									item.data.textValue?.vertical || GuiAlign.Top
-								)} {horizontalAlign(item.data.textValue?.horizontal || GuiAlign.Left)} h-full"
-							>
-								<p class="lg:text-base text-xs truncate">
-									{#if item.data.textValue?.text}
-										{item.data.textValue.text}
-									{:else}
-										Unset
-									{/if}
-								</p>
-							</div>
-						{:else}
-							<p class="truncate">
-								TypeError: Mismatched Type. Please delete this Element and put in a new one!
-							</p>
-						{/if}
-					{:else if item.type == GuiType.Buttons}
-						{#if item.data.actions}
+						</div>
+					{:else if view.type == GuiType.Buttons}
+						{#if view.data.actions}
 							<div class="flex justify-between items-center h-full">
-								{#each item.data.actions as action}
+								{#each view.data.actions as action}
 									{#if action}
 										<span
 											class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled truncate h-fit lg:text-base text-xs"
 										>
-											{action.textValue}
+											{action.text_value}
 											{#if action.event}
 												<span
 													class="ml-2 badge variant-filled-tertiary z-10 place-self-center truncate lg:text-base text-xs"
-													>{action.event.type}</span
+													>{Object.keys(action.event)[0]}</span
 												>
 											{/if}
 										</span>
@@ -147,22 +135,22 @@
 								{/each}
 							</div>
 						{/if}
-					{:else if item.type == GuiType.Alert}
-						{#if item.data.textValue}
-							<p class="truncate lg:text-base text-xs">{item.data.textValue}</p>
+					{:else if view.type == GuiType.Alert}
+						{#if view.data.text_value}
+							<p class="truncate lg:text-base text-xs">{view.data.text_value}</p>
 						{:else}
 							<p class="opacity-30 truncate lg:text-base text-xs">Unset</p>
 						{/if}
 						<div class="flex justify-center items-end h-full">
-							{#if item.data.actions && item.data.actions[0]}
+							{#if view.data.actions && view.data.actions[0]}
 								<span
 									class="rounded-sm pt-2 pb-2 pr-5 pl-5 variant-filled truncate h-fit mb-8 lg:text-base text-xs"
 								>
-									{item.data.actions[0].textValue}
-									{#if item.data.actions[0].event}
+									{view.data.actions[0].text_value}
+									{#if view.data.actions[0].event}
 										<span
 											class="ml-2 badge variant-filled-tertiary z-10 place-self-center truncate lg:text-base text-xs"
-											>{item.data.actions[0].event.type}</span
+											>{Object.keys(view.data.actions[0].event)[0]}</span
 										>
 									{/if}
 								</span>
@@ -174,22 +162,22 @@
 							{/if}
 						</div>
 					{:else}
-						{item.name},
-						{#each keys(item.data) as key (key)}
-							<span class="flex-auto truncate">{key}: {item.data[key]}, </span>
+						{view.name},
+						{#each keys(view.data) as key (key)}
+							<span class="flex-auto truncate">{key}: {view.data[key]}, </span>
 						{/each}
 					{/if}
-					<span class="badge variant-filled absolute -top-4 -left-4 z-[2]">{item.name}</span>
+					<span class="badge variant-filled absolute -top-4 -left-4 z-[2]">{view.name}</span>
 					<button
 						class="btn w-8 h-[24px] pt-1 pb-1 pr-2 pl-2 variant-filled-primary absolute -top-4 right-8 z-[99]"
 						title="Edit"
-						on:click={() => editItem(item)}
+						on:click={() => editItem(view)}
 						on:pointerdown={(e) => e.stopPropagation()}><i class="fa-solid fa-pen"></i></button
 					>
 					<button
 						class="btn w-8 h-[24px] pt-1 pb-1 pr-2 pl-2 variant-filled-error absolute -top-4 -right-4 z-[99]"
 						title="Delete"
-						on:click={() => deleteItem(item.id)}
+						on:click={() => deleteItem(view.id)}
 						on:pointerdown={(e) => e.stopPropagation()}
 						><i class="fa-solid fa-delete-left"></i></button
 					>
