@@ -85,7 +85,7 @@
 					y: 0,
 					moveable: false,
 					data: {
-						text_value: null,
+						text_value: '',
 						horizontal: null,
 						vertical: null,
 						actions: [
