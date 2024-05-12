@@ -77,5 +77,5 @@ fn main(_args: Option<&CStr>) -> i32 {
 		bind:innerHTML={highlightedCode}
 		contenteditable="false"
 		aria-multiline="true"
-		class="text-sm mb-4 mt-6 !max-h-full overflow-x-auto whitespace-pre-wrap text-nowrap rounded-lg border bg-zinc-950 p-4 py-4 font-mono text-white dark:bg-zinc-900"></pre>
+		class="mb-4 mt-6 !max-h-full overflow-x-auto whitespace-pre-wrap text-nowrap rounded-lg border bg-zinc-950 p-4 py-4 font-mono text-sm text-white dark:bg-zinc-900"></pre>
 </div>
