@@ -4,10 +4,6 @@ _The UI Builder for the Flipper Zero_
 
 **Flip** is an innovative UI builder designed for creating user interfaces specifically tailored for Flipper Zero applications. This tool simplifies the process of designing, exporting, and integrating UIs into your Flipper Zero projects using Rust.
 
-## Major Note
-
-The current website is going to be reworked to be fitting more the adjoined [Rust Crate]()!
-
 ## Features
 
 - **Intuitive UI Builder**: Design your UI with an easy-to-use interface.
