@@ -6,8 +6,9 @@
 	<title>Home</title>
 	<meta name="description" content="Homepage" />
 </svelte:head>
+
 <div class="container mx-auto flex max-w-6xl flex-col space-y-8 p-4">
-	<h1 class="h1">Welcome to <span class="inline-block rotate-180">flip-ui</span></h1>
+	<h1 class="h1">Welcome to <span class="inline-block rotate-180">flip</span></h1>
 	<blockquote class="blockquote">The UI Builder for the Flipper Zero</blockquote>
 	<p>Effortlessly design and export user interfaces for your Flipper Zero applications.</p>
 

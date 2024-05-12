@@ -30,4 +30,4 @@ To bring your UI to life in a Flipper Zero app:
 2. Load the JSON file to render the UI components.
 3. Pass in your functions and variables for full functionality.
 
-For examples look into the [Rust Crate Repository]()!
+For examples look into the [Rust Crate Repository](https://github.com/flip-ui/flip-ui-rs)!
