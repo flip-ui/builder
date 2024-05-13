@@ -1,11 +1,12 @@
 <script>
 	import '../app.pcss';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import * as Sheet from '$lib/components/ui/sheet';
 	import { Button } from '$lib/components/ui/button';
-	import { Sun, Moon, Github, User } from 'lucide-svelte';
+	import { Sun, Moon, Github, User, Menu } from 'lucide-svelte';
 	import { page } from '$app/stores';
+	import SideBar from './builder/SideBar.svelte';
 </script>
 
 <ModeWatcher disableTransitions={false} />
@@ -17,6 +18,27 @@
 		<div class="flex h-[70px] items-center justify-between gap-3">
 			<div class="flex items-center gap-1.5">
 				<nav class="flex items-center gap-6 text-sm">
+					<Sheet.Root>
+						<Sheet.Trigger asChild let:builder hidden={$page.url.pathname != '/builder'}>
+							<Button
+								builders={[builder]}
+								variant="ghost"
+								size="icon"
+								class="rounded-lg md:hidden {$page.url.pathname == '/builder' ? 'flex' : 'hidden'}"
+								aria-label="Models"
+							>
+								<Menu scale="5" />
+							</Button>
+						</Sheet.Trigger>
+						<Sheet.Content side="left" class="w-[400px]">
+							<Sheet.Header class="h-full">
+								<!-- <Sheet.Title>Are you sure absolutely sure?</Sheet.Title> -->
+								<Sheet.Description class="flex h-full">
+									<SideBar />
+								</Sheet.Description>
+							</Sheet.Header>
+						</Sheet.Content>
+					</Sheet.Root>
 					<a
 						href="/"
 						class="{$page.url.pathname == '/'

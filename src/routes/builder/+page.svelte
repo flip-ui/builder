@@ -8,9 +8,9 @@
 	<meta name="description" content="Website's specific UI-Builder" />
 </svelte:head>
 
-<div class="asd grid w-full pl-[336px]">
+<div class="asd grid w-full md:pl-[336px]">
 	<aside
-		class="inset-y fixed left-0 z-20 flex h-full flex-col border-b border-border/40 bg-background/75 backdrop-blur supports-[backdrop-filter]:bg-background/40"
+		class="inset-y fixed left-0 z-20 hidden h-full flex-col border-b border-border/40 bg-background/75 backdrop-blur supports-[backdrop-filter]:bg-background/40 md:flex"
 	>
 		<SideBar />
 	</aside>
