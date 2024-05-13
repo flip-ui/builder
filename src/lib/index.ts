@@ -6,7 +6,7 @@ export interface Data {
 }
 
 export interface View {
-    data: MessageData | InputData | BrowserData;
+    data: MessageData | InputData | BrowserData | any;
     // not to serialize
     type: GuiType;
 }
@@ -21,7 +21,7 @@ export enum GuiType {
 export interface MessageData {
     header: Option<Label>,
     text: Option<Label>,
-    buttons: Option<Option<Event>[]>,
+    buttons: Option<Event>[],
 }
 
 export interface Label {
@@ -40,10 +40,13 @@ export enum Align {
     Center,
 }
 
+export interface Event {
+    text: string;
+    function: string;
+}
+
 export interface InputData {
-    // todo
 }
 
 export interface BrowserData {
-    // todo
 }

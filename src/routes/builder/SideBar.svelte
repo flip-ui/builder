@@ -17,10 +17,9 @@
 			onclick: () => {
 				$data.current = index;
 			},
-			del: () => {
+			del: (i: number) => {
 				if (data.current != 0 && data.views.length - 1 <= data.current) $data.current -= 1;
-				// fix
-				$data.views.pop();
+				$data.views.splice(i, 1);
 				$data = $data;
 			}
 		}));
@@ -59,7 +58,7 @@
 										data: {
 											header: null,
 											text: null,
-											buttons: null
+											buttons: [null, null, null]
 										},
 										type: GuiType.Dialog
 									});
@@ -109,11 +108,12 @@
 			]
 		}
 	];
-	onMount(() => ($data = $data));
 </script>
 
 <div class="grid h-full grid-cols-[auto_1fr]">
-	<nav class="flex flex-col gap-1 border-r p-2">
+	<nav
+		class="flex flex-col gap-1 border-r bg-background/85 p-2 backdrop-blur supports-[backdrop-filter]:bg-background/45"
+	>
 		<Tooltip.Root>
 			<Tooltip.Trigger asChild let:builder>
 				<Button
@@ -149,7 +149,9 @@
 			<Tooltip.Content side="right" sideOffset={5}>Export</Tooltip.Content>
 		</Tooltip.Root>
 	</nav>
-	<nav class="grid w-[280px] gap-1 overflow-y-auto">
+	<nav
+		class="grid w-[280px] gap-1 overflow-y-auto bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/20"
+	>
 		<div class="space-y-4 overflow-y-auto p-4 pb-20">
 			{#each submenu as segment, i (i)}
 				{#if segment.tile == currentTile}
@@ -157,7 +159,7 @@
 					<p class="h3">{segment.title}</p>
 					<!-- List -->
 					<ul class="flex-auto">
-						{#each segment.list as { label, badge, onclick, dropdown, disabled, del }}
+						{#each segment.list as { label, badge, onclick, dropdown, disabled, del }, i}
 							<div class="flex flex-nowrap space-y-2">
 								{#if dropdown}
 									<DropdownMenu.Root>
@@ -172,7 +174,7 @@
 												><span class="flex-auto text-start">{@html label}</span>
 											</Button>
 										</DropdownMenu.Trigger>
-										<DropdownMenu.Content align="start">
+										<DropdownMenu.Content align="start" sameWidth>
 											<DropdownMenu.Group>
 												<DropdownMenu.Label>{dropdown.title}</DropdownMenu.Label>
 												<DropdownMenu.Separator />
@@ -198,7 +200,7 @@
 								{/if}
 
 								{#if del}
-									<Button variant="destructive" size="icon" class="mr-2 p-2" on:click={() => del()}
+									<Button variant="destructive" size="icon" class="mr-2 p-2" on:click={() => del(i)}
 										><CircleX /></Button
 									>
 								{/if}
