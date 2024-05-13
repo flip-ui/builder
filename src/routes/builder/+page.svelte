@@ -8,13 +8,13 @@
 	<meta name="description" content="Website's specific UI-Builder" />
 </svelte:head>
 
-<div class="grid w-full pl-[336px] asd">
+<div class="asd grid w-full pl-[336px]">
 	<aside
 		class="inset-y fixed left-0 z-20 flex h-full flex-col border-b border-border/40 bg-background/75 backdrop-blur supports-[backdrop-filter]:bg-background/40"
 	>
 		<SideBar />
 	</aside>
-	<div class="p-2 h-full">
+	<div class="h-full p-2">
 		<Editor />
 	</div>
 </div>
