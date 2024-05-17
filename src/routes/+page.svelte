@@ -35,7 +35,8 @@
 		predefined event (in the proc macro), which currently are:
 		<code class="code">none</code>, <code class="code">next</code>, <code class="code">back</code>
 		and
-		<code class="code">close</code>.
+		<code class="code">close</code>. Events can do internal logic or switch to a certain view e.g.
+		using <code class="code">next</code> for going to the next View.
 	</p>
 
 	<h3 class="h3">Integration with Rust</h3>
