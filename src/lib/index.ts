@@ -6,7 +6,7 @@ export interface Data {
 }
 
 export interface View {
-	data: MessageData | InputData | BrowserData | any;
+	data: MessageData | AlertData | BrowserData | InputData | any;
 	// not to serialize
 	type: GuiType;
 }
@@ -22,6 +22,22 @@ export interface MessageData {
 	header: Option<Label>;
 	text: Option<Label>;
 	buttons: Option<Event>[];
+	back_function: string;
+}
+
+export interface AlertData {
+	text: string;
+	function: string;
+	back_function: string;
+}
+
+export interface BrowserData {}
+
+export interface InputData {}
+
+export interface Event {
+	text: string;
+	function: string;
 }
 
 export interface Label {
@@ -33,18 +49,14 @@ export interface Label {
 }
 
 export enum Align {
-	Left,
-	Right,
-	Top,
-	Bottom,
-	Center
+	Left = 'Left',
+	Right = 'Right',
+	Top = 'Top',
+	Bottom = 'Bottom',
+	Center = 'Center'
 }
 
 export interface Event {
 	text: string;
 	function: string;
 }
-
-export interface InputData {}
-
-export interface BrowserData {}

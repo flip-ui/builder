@@ -26,11 +26,13 @@ manifest!(
 // Define the entry function
 entry!(main);
 
-// Getting UI data && actions
+// Getting UI data && events
 flipper_ui! {
 	App,
 	"src/main.json",
+	none => none,
 	next => next,
+	back => back,
 	close => close,
 }
 

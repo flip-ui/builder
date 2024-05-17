@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>Builder</title>
+	<title>Builder - flip</title>
 	<meta name="description" content="Website's specific UI-Builder" />
 </svelte:head>
 
@@ -12,7 +12,7 @@
 	<aside
 		class="inset-y fixed left-0 z-20 hidden h-full flex-col border-b border-border/40 bg-background/75 backdrop-blur supports-[backdrop-filter]:bg-background/40 md:flex"
 	>
-		<SideBar />
+		<SideBar backdrop />
 	</aside>
 	<div class="h-full p-2">
 		<Editor />

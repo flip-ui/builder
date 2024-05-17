@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>flip</title>
 	<meta name="description" content="Homepage" />
 </svelte:head>
 
@@ -21,26 +21,23 @@
 
 	<h3 class="h3">Events</h3>
 	<p>
-		All buttons can have events. An event can be a function you defined in the Rust proc macro code
-		or a predefined event, which currently are:
-		<code class="code">next</code>, <code class="code">back</code> and
+		All buttons can have events. An event can be a function you defined in your Rust code or a
+		predefined event (in the proc macro), which currently are:
+		<code class="code">none</code>, <code class="code">next</code>, <code class="code">back</code>
+		and
 		<code class="code">close</code>.
 	</p>
 	<h3 class="h3">UI Items</h3>
-	<p>
-		The UI operates on the principle of views. Every view can have UI items (found under the UI <code
-			class="code">Add Items</code
-		>
-		- Tab) of one category. Using the Edit (pen icon) button, you can edit the already described properties
-		(plus, on Header and Body Text, you can also set text alignment). You can also set the position of
-		<code class="code">Moveable</code> items by moving them.
-	</p>
+	<p>// Todo new explanation</p>
 
 	<h3 class="h3">Integration with Rust</h3>
 	<p>
-		To integrate the exported JSON into your Flipper Zero app, use our dedicated Rust crate. Simply
-		include the crate in your project and load the JSON to render the UI components (don't forget to
-		pass in your functions).
+		To integrate the exported JSON into your Flipper Zero app, use <a
+			href="https://github.com/flip-ui/flip-ui-rs"
+			target="_blank"
+			class="text-primary underline underline-offset-4">our dedicated Rust crate</a
+		>. Simply include the crate in your project and load the JSON to render the UI components (don't
+		forget to pass in your functions).
 	</p>
 	<h3 class="h3">Example:</h3>
 

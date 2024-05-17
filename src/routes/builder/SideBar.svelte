@@ -6,6 +6,7 @@
 	import { data } from '$lib/stores';
 	import { GuiType, type Data } from '$lib';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
+	import { onMount } from 'svelte';
 
 	export let backdrop = false;
 
@@ -26,8 +27,23 @@
 		}));
 	}
 
+	function replacer(key: string, value: any) {
+		if (key === 'current') {
+			return undefined;
+		}
+		if (key === 'views' && Array.isArray(value)) {
+			return value.map((view) => {
+				if (view && typeof view === 'object' && 'type' in view && 'data' in view) {
+					return { [view.type.toLowerCase()]: view.data };
+				}
+				return view;
+			});
+		}
+		return value;
+	}
+
 	function downloadJson() {
-		const jsonStr = JSON.stringify($data, null, 2);
+		const jsonStr = JSON.stringify($data, replacer, 2);
 		const blob = new Blob([jsonStr], { type: 'application/json' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
@@ -37,7 +53,7 @@
 		URL.revokeObjectURL(url);
 	}
 
-	let currentTile = 0;
+	let currentTile = -1;
 	$: submenu = [
 		{
 			title: 'Views',
@@ -59,7 +75,8 @@
 										data: {
 											header: null,
 											text: null,
-											buttons: [null, null, null]
+											buttons: [null, null, null],
+											back_function: 'close'
 										},
 										type: GuiType.Dialog
 									});
@@ -71,7 +88,11 @@
 								disabled: false,
 								onclick: () => {
 									$data.views.push({
-										data: {},
+										data: {
+											text: '',
+											function: '',
+											back_function: 'close'
+										},
 										type: GuiType.Alert
 									});
 									$data = $data;
@@ -109,6 +130,9 @@
 			]
 		}
 	];
+	onMount(() => {
+		currentTile = 0;
+	});
 </script>
 
 <div class="grid h-full grid-cols-[auto_1fr] text-black dark:text-white">
@@ -154,7 +178,7 @@
 	</nav>
 	<nav
 		class="grid w-[280px] gap-1 overflow-y-auto {backdrop
-			? 'bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/20'
+			? 'border-r bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/20'
 			: ''}"
 	>
 		<div class="space-y-4 overflow-y-auto p-4 pb-20">
