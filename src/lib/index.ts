@@ -12,7 +12,7 @@ export interface View {
 }
 
 export enum GuiType {
-	Dialog = 'Dialog',
+	Message = 'Message',
 	Alert = 'Alert',
 	Browser = 'Browser',
 	Input = 'Input'

@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { data } from '$lib/stores';
 	import * as Card from '$lib/components/ui/card';
-	import { Align, GuiType } from '$lib';
+	import { GuiType } from '$lib';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { CircleAlert, Eye, EyeOff, Pencil, SquareChevronLeft } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
-	import LabelDialog from './LabelDialog.svelte';
 	import EventDialog from './EventDialog.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import * as Alert from '$lib/components/ui/alert';
@@ -44,7 +43,7 @@
 	</div>
 
 	<div class="flex h-full flex-col justify-between gap-2">
-		{#if $data.views[$data.current]?.type == GuiType.Dialog}
+		{#if $data.views[$data.current]?.type == GuiType.Message}
 			<LabelItem bind:label={$data.views[$data.current].data.header} type="Header" />
 			<LabelItem bind:label={$data.views[$data.current].data.text} type="Text" />
 			<div class="grid w-full grid-cols-3 gap-2">
@@ -158,7 +157,8 @@
 				<CircleAlert class="h-4 w-4" />
 				<Alert.Title>Error</Alert.Title>
 				<Alert.Description
-					>This View isn't implemented yet. Just wait until I've done my work!</Alert.Description
+					>This View is either not implemented yet and you just have to wait until I've done my work
+					or the data types changed and you have to delete and redo the View!</Alert.Description
 				>
 			</Alert.Root>
 		{/if}

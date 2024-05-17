@@ -68,7 +68,7 @@
 						title: 'Type',
 						items: [
 							{
-								label: 'Dialog',
+								label: 'Message',
 								disabled: false,
 								onclick: () => {
 									$data.views.push({
@@ -78,7 +78,7 @@
 											buttons: [null, null, null],
 											back_function: 'close'
 										},
-										type: GuiType.Dialog
+										type: GuiType.Message
 									});
 									$data = $data;
 								}

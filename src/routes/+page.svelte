@@ -23,10 +23,10 @@
 	<p>
 		Every possible user interface is build from multiple Views. That's like a slide a in a
 		presentation and multiple Slides are building the whole presentation. A View can be different
-		types: Either a <code class="code">Dialog</code>,
+		types: Either a <code class="code">Message</code>,
 		<code class="code">Alert</code>, <code class="code">Browser</code> or
 		<code class="code">Input</code>. Every View comes with their own UI Elements which can be hidden
-		(dialog) or just edited (all).
+		(Message) or just edited (All).
 	</p>
 
 	<h3 class="h3">Events</h3>

@@ -4,7 +4,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { Button } from '$lib/components/ui/button';
-	import { Sun, Moon, Github, User, Menu } from 'lucide-svelte';
+	import { Sun, Moon, Menu } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import SideBar from './builder/SideBar.svelte';
 </script>
