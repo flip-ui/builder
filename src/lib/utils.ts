@@ -1,57 +1,56 @@
-import type { View } from './types';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { cubicOut } from 'svelte/easing';
+import type { TransitionConfig } from 'svelte/transition';
 
-export function keys<T extends object>(obj: T) {
-	return Object.keys(obj) as Array<keyof T>;
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
 }
 
-export function areArraysEqual(arr1: any[], arr2: any[]): boolean {
-	if (arr1.length !== arr2.length) {
-		return false;
-	}
+type FlyAndScaleParams = {
+	y?: number;
+	x?: number;
+	start?: number;
+	duration?: number;
+};
 
-	for (let i = 0; i < arr1.length; i++) {
-		if (!areObjectsEqual(arr1[i], arr2[i])) {
-			return false;
-		}
-	}
+export const flyAndScale = (
+	node: Element,
+	params: FlyAndScaleParams = { y: -8, x: 0, start: 0.95, duration: 150 }
+): TransitionConfig => {
+	const style = getComputedStyle(node);
+	const transform = style.transform === 'none' ? '' : style.transform;
 
-	return true;
-}
+	const scaleConversion = (valueA: number, scaleA: [number, number], scaleB: [number, number]) => {
+		const [minA, maxA] = scaleA;
+		const [minB, maxB] = scaleB;
 
-export function areObjectsEqual(obj1: any, obj2: any): boolean {
-	if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
-		return obj1 === obj2;
-	}
+		const percentage = (valueA - minA) / (maxA - minA);
+		const valueB = percentage * (maxB - minB) + minB;
 
-	const keys1 = Object.keys(obj1);
-	const keys2 = Object.keys(obj2);
+		return valueB;
+	};
 
-	if (keys1.length !== keys2.length) {
-		return false;
-	}
+	const styleToString = (style: Record<string, number | string | undefined>): string => {
+		return Object.keys(style).reduce((str, key) => {
+			if (style[key] === undefined) return str;
+			return str + `${key}:${style[key]};`;
+		}, '');
+	};
 
-	for (const key of keys1) {
-		if (!areObjectsEqual(obj1[key], obj2[key])) {
-			return false;
-		}
-	}
+	return {
+		duration: params.duration ?? 200,
+		delay: 0,
+		css: (t) => {
+			const y = scaleConversion(t, [0, 1], [params.y ?? 5, 0]);
+			const x = scaleConversion(t, [0, 1], [params.x ?? 0, 0]);
+			const scale = scaleConversion(t, [0, 1], [params.start ?? 0.95, 1]);
 
-	return true;
-}
-
-export function isItemColliding(item: View, otherItem: View) {
-	return (
-		item.id !== otherItem.id &&
-		item.x <= otherItem.x + otherItem.w - 1 &&
-		item.y <= otherItem.y + otherItem.h - 1 &&
-		item.x + item.w - 1 >= otherItem.x &&
-		item.y + item.h - 1 >= otherItem.y
-	);
-}
-
-export function areItemsColliding(item: View, items: View[]) {
-	for (const item2 of items) {
-		if (isItemColliding(item, item2)) return true;
-	}
-	return false;
-}
+			return styleToString({
+				transform: `${transform} translate3d(${x}px, ${y}px, 0) scale(${scale})`,
+				opacity: t
+			});
+		},
+		easing: cubicOut
+	};
+};

@@ -1,109 +1,80 @@
-<script lang="ts">
-	import '../app.postcss';
-	import '@fortawesome/fontawesome-free/css/all.css';
-	import {
-		AppShell,
-		AppBar,
-		Modal,
-		Drawer,
-		type DrawerSettings,
-		getDrawerStore,
-		type ModalComponent
-	} from '@skeletonlabs/skeleton';
-
-	// stores
-	import { initializeStores } from '@skeletonlabs/skeleton';
-	initializeStores();
-
-	const modalRegistry: Record<string, ModalComponent> = {
-		editModal: { ref: EditModal }
-	};
-
-	const drawerStore = getDrawerStore();
-
-	// Floating UI for Popups
-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
-	import Menu from './builder/Menu.svelte';
+<script>
+	import '../app.pcss';
+	import { ModeWatcher, toggleMode } from 'mode-watcher';
+	import * as Avatar from '$lib/components/ui/avatar';
+	import * as Sheet from '$lib/components/ui/sheet';
+	import { Button } from '$lib/components/ui/button';
+	import { Sun, Moon, Github, User, Menu } from 'lucide-svelte';
 	import { page } from '$app/stores';
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-
-	// hljs
-	import hljs from 'highlight.js/lib/core';
-	import rust from 'highlight.js/lib/languages/rust';
-	hljs.registerLanguage('rust', rust);
-	import 'highlight.js/styles/github-dark.css';
-	import { storeHighlightJs } from '@skeletonlabs/skeleton';
-	import EditModal from './builder/EditModal.svelte';
-	storeHighlightJs.set(hljs);
-
-	// Drawer Handler
-	function drawerOpen(): void {
-		const s: DrawerSettings = { id: 'doc-sidenav' };
-		drawerStore.open(s);
-	}
+	import SideBar from './builder/SideBar.svelte';
 </script>
 
-<Modal components={modalRegistry} />
-<Drawer class={$drawerStore.id === 'doc-sidenav' ? 'lg:hidden' : ''}>
-	{#if $drawerStore.id === 'doc-sidenav'}
-		<Menu embedded={true} />
-	{:else}
-		<!-- Fallback Error -->
-		<div class="w-full h-full flex justify-center items-center">
-			<div class="text-center space-y-2">
-				<p>Invalid <code class="code">$drawerStore.id</code> provided.</p>
+<ModeWatcher disableTransitions={false} />
+
+<header
+	class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+>
+	<div class="container pl-4 pr-4">
+		<div class="flex h-[70px] items-center justify-between gap-3">
+			<div class="flex items-center gap-1.5">
+				<nav class="flex items-center gap-6 text-sm">
+					<Sheet.Root>
+						<Sheet.Trigger asChild let:builder hidden={$page.url.pathname != '/builder'}>
+							<Button
+								builders={[builder]}
+								variant="ghost"
+								size="icon"
+								class="rounded-lg md:hidden {$page.url.pathname == '/builder' ? 'flex' : 'hidden'}"
+								aria-label="Models"
+							>
+								<Menu scale="5" />
+							</Button>
+						</Sheet.Trigger>
+						<Sheet.Content side="left" class="w-[400px]">
+							<Sheet.Header class="h-full">
+								<!-- <Sheet.Title>Are you sure absolutely sure?</Sheet.Title> -->
+								<Sheet.Description class="flex h-full">
+									<SideBar />
+								</Sheet.Description>
+							</Sheet.Header>
+						</Sheet.Content>
+					</Sheet.Root>
+					<a
+						href="/"
+						class="{$page.url.pathname == '/'
+							? 'text-foreground'
+							: 'text-foreground/60'}  transition-colors hover:text-foreground/80"
+						><Avatar.Root>
+							<Avatar.Image src="favicon.png" alt="flip-ui" />
+							<Avatar.Fallback>FP</Avatar.Fallback>
+						</Avatar.Root></a
+					>
+					<a
+						href="/builder"
+						class="{$page.url.pathname == '/builder'
+							? 'text-foreground'
+							: 'text-foreground/60'} transition-colors hover:text-foreground/80">Builder</a
+					>
+					<a
+						href="https://github.com/flip-ui"
+						target="_blank"
+						class="text-foreground/60 transition-colors hover:text-foreground/80">Github</a
+					>
+				</nav>
+			</div>
+			<div class="flex items-center justify-end gap-2.5">
+				<Button on:click={toggleMode} variant="outline" size="icon">
+					<Sun
+						class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+					/>
+					<Moon
+						class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+					/>
+					<span class="sr-only">Toggle theme</span>
+				</Button>
 			</div>
 		</div>
-	{/if}
-</Drawer>
+	</div>
+</header>
 
-<!-- App Shell -->
-<AppShell slotSidebarLeft="bg-surface-50-900-token">
-	<svelte:fragment slot="header">
-		<!-- App Bar -->
-		<AppBar shadow="shadow-2xl" slotTrail="!space-x-2">
-			<svelte:fragment slot="lead">
-				<!-- Hamburger Menu -->
-				{#if $page.url.pathname == '/builder'}
-					<button on:click={drawerOpen} class="btn-icon btn-icon-sm lg:!hidden">
-						<i class="fa-solid fa-bars text-xl" />
-					</button>
-				{/if}
-				<a href="/"><h1 class="h1 scale-x-[-1] scale-y-[-1]">flip</h1></a>
-			</svelte:fragment>
-			<svelte:fragment slot="trail">
-				<a
-					class="btn hover:variant-soft-primary {$page.url.pathname == '/'
-						? 'bg-primary-active-token'
-						: ''}"
-					href="/"
-					data-sveltekit-preload-data="hover">Home</a
-				>
-				<a
-					class="btn hover:variant-soft-primary {$page.url.pathname == '/builder'
-						? 'bg-primary-active-token'
-						: ''}"
-					href="/builder"
-					data-sveltekit-preload-data="hover">Builder</a
-				>
-				<a
-					class="btn w-12 hover:variant-soft-primary"
-					style="padding-top: 13px; padding-bottom: 13px;"
-					href="https://github.com/flip-ui/flip-ui.github.io/"
-					target="_blank"
-					rel="noreferrer"
-					><i class="fa-brands fa-github text-lg"></i>
-				</a>
-			</svelte:fragment>
-		</AppBar>
-	</svelte:fragment>
-
-	<svelte:fragment slot="sidebarLeft">
-		{#if $page.url.pathname == '/builder'}
-			<Menu class="hidden lg:grid w-[360px] overflow-hidden" />
-		{/if}
-	</svelte:fragment>
-	<!-- Page Route Content -->
-	<slot />
-</AppShell>
+<slot />

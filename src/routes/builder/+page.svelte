@@ -1,24 +1,26 @@
-<script lang="ts">
-	import { views } from '$lib/stores';
-	import Grid from './Grid.svelte';
+<script>
+	import SideBar from './SideBar.svelte';
+	import Editor from './Editor.svelte';
 </script>
 
 <svelte:head>
-	<title>Builder</title>
+	<title>Builder - flip</title>
 	<meta name="description" content="Website's specific UI-Builder" />
 </svelte:head>
 
-<h2 class="h2 m-2">{$views.pages.length != 0 ? `View ${$views.current + 1}` : 'No Views!'}</h2>
-<div
-	class="card p-4 m-2 {$views.pages.length != 0
-		? 'variant-ghost-primary'
-		: 'variant-ghost'} overflow-hidden"
->
-	<Grid />
+<div class="asd grid w-full md:pl-[336px]">
+	<aside
+		class="inset-y fixed left-0 z-20 hidden h-full flex-col border-b border-border/40 bg-background/75 backdrop-blur supports-[backdrop-filter]:bg-background/40 md:flex"
+	>
+		<SideBar backdrop />
+	</aside>
+	<div class="h-full p-2">
+		<Editor />
+	</div>
 </div>
 
 <style>
-	div {
-		height: calc(100% - 64px);
+	.asd {
+		height: calc(100% - 71px);
 	}
 </style>
