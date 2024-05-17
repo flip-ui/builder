@@ -10,6 +10,7 @@
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import * as Alert from '$lib/components/ui/alert';
 	import TextDialog from './TextDialog.svelte';
+	import LabelItem from './LabelItem.svelte';
 </script>
 
 <div class="flex h-full flex-col">
@@ -44,120 +45,8 @@
 
 	<div class="flex h-full flex-col justify-between gap-2">
 		{#if $data.views[$data.current]?.type == GuiType.Dialog}
-			{@const headerShown = $data.views[$data.current]?.data.header}
-			<Card.Root class="w-full {!headerShown ? 'opacity-50' : ''}">
-				<Card.Header>
-					<Card.Title>
-						<div class="flex items-center justify-between">
-							<span>
-								Header
-								{#if headerShown}
-									<Badge>x: {$data.views[$data.current]?.data.header?.x}</Badge>
-									<Badge>y: {$data.views[$data.current]?.data.header?.y}</Badge>
-								{/if}
-							</span>
-							<div class="flex space-x-1">
-								<LabelDialog
-									bind:label={$data.views[$data.current].data.header}
-									type={'Header'}
-									let:dialog
-								>
-									<Button size="icon" variant="ghost" disabled={!headerShown} builders={[dialog]}>
-										<Pencil class="h-4 w-4" />
-									</Button>
-								</LabelDialog>
-								<Button
-									size="icon"
-									variant="ghost"
-									on:click={() => {
-										if (!headerShown) {
-											$data.views[$data.current].data.header = {
-												text: '',
-												x: 0,
-												y: 0,
-												vertical: Align.Left,
-												horizontal: Align.Top
-											};
-										} else {
-											$data.views[$data.current].data.header = null;
-										}
-									}}
-								>
-									{#if headerShown}
-										<Eye class="h-4 w-4" />
-									{:else}
-										<EyeOff class="h-4 w-4" />
-									{/if}
-								</Button>
-							</div>
-						</div>
-					</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<div class="grid">
-						<span class="truncate"
-							>{headerShown ? $data.views[$data.current]?.data.header.text : 'hidden'}</span
-						>
-					</div>
-				</Card.Content>
-			</Card.Root>
-			{@const textShown = $data.views[$data.current]?.data.text}
-			<Card.Root class="w-full {!textShown ? 'opacity-50' : ''}">
-				<Card.Header>
-					<Card.Title>
-						<div class="flex items-center justify-between">
-							<span
-								>Text
-								{#if textShown}
-									<Badge>x: {$data.views[$data.current]?.data.text?.x}</Badge>
-									<Badge>y: {$data.views[$data.current]?.data.text?.y}</Badge>
-								{/if}
-							</span>
-							<div class="flex space-x-1">
-								<LabelDialog
-									bind:label={$data.views[$data.current].data.text}
-									type={'Text'}
-									let:dialog
-								>
-									<Button size="icon" variant="ghost" disabled={!textShown} builders={[dialog]}>
-										<Pencil class="h-4 w-4" />
-									</Button>
-								</LabelDialog>
-								<Button
-									size="icon"
-									variant="ghost"
-									on:click={() => {
-										if (!textShown) {
-											$data.views[$data.current].data.text = {
-												text: '',
-												x: 64,
-												y: 0,
-												vertical: Align.Left,
-												horizontal: Align.Top
-											};
-										} else {
-											$data.views[$data.current].data.text = null;
-										}
-									}}
-								>
-									{#if textShown}
-										<Eye class="h-4 w-4" />
-									{:else}
-										<EyeOff class="h-4 w-4" />
-									{/if}
-								</Button>
-							</div>
-						</div>
-					</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<div class="grid">
-						<span class="truncate"
-							>{textShown ? $data.views[$data.current]?.data.text.text : 'hidden'}</span
-						>
-					</div>
-				</Card.Content>
-			</Card.Root>
+			<LabelItem bind:label={$data.views[$data.current].data.header} type="Header" />
+			<LabelItem bind:label={$data.views[$data.current].data.text} type="Text" />
 			<div class="grid w-full grid-cols-3 gap-2">
 				{#each $data.views[$data.current]?.data.buttons as event}
 					<Card.Root class="w-full {!event ? 'opacity-50' : ''}">
@@ -230,7 +119,7 @@
 					</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<div class="grid">
+					<div class="grid h-12">
 						<span class="truncate">{$data.views[$data.current]?.data.text}</span>
 					</div>
 				</Card.Content>

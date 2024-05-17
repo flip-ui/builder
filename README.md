@@ -31,3 +31,11 @@ To bring your UI to life in a Flipper Zero app:
 3. Pass in your functions and variables for full functionality.
 
 For examples look into the [Rust Crate Repository](https://github.com/flip-ui/flip-ui-rs)!
+
+## Todos
+
+- [ ] Add virtual presentation of positioning
+- [ ] Add Browser View
+- [ ] Add Input View
+
+> Some minor Todos, will be done in the future
