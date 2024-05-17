@@ -2,19 +2,20 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main'
+    branches: ['main']
+  workflow_dispatch: {}
 
 jobs:
   build_site:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
         with:
-          node-version: 'latest'
+          bun-version: 'latest'
 
       - name: Install dependencies
         run: bun install
