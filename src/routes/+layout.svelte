@@ -14,7 +14,7 @@
 <header
 	class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-	<div class="container pl-4 pr-4">
+	<div class="container max-w-full pl-4 pr-4">
 		<div class="flex h-[70px] items-center justify-between gap-3">
 			<div class="flex items-center gap-1.5">
 				<nav class="flex items-center gap-6 text-sm">
@@ -34,7 +34,7 @@
 							<Sheet.Header class="h-full">
 								<!-- <Sheet.Title>Are you sure absolutely sure?</Sheet.Title> -->
 								<Sheet.Description class="flex h-full">
-									<SideBar />
+									<SideBar mobile />
 								</Sheet.Description>
 							</Sheet.Header>
 						</Sheet.Content>

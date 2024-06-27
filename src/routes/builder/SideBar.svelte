@@ -8,7 +8,7 @@
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import { onMount } from 'svelte';
 
-	export let backdrop = false;
+	export let mobile = false;
 
 	function convertDataToMenu(data: Data) {
 		return data.views.map((view, index) => ({
@@ -135,11 +135,15 @@
 	});
 </script>
 
-<div class="grid h-full grid-cols-[auto_1fr] text-black dark:text-white">
+<div
+	class="{mobile
+		? 'grid'
+		: 'hidden md:grid'} h-full w-full grid-cols-[auto_1fr] overflow-scroll text-black dark:text-white"
+>
 	<nav
-		class="flex flex-col gap-1 border-r p-2 {backdrop
-			? 'bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/45'
-			: ''} "
+		class="flex flex-col gap-1 border-r p-2 {mobile
+			? ''
+			: 'bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/45'} "
 	>
 		<Tooltip.Root>
 			<Tooltip.Trigger asChild let:builder>
@@ -177,11 +181,11 @@
 		</Tooltip.Root>
 	</nav>
 	<nav
-		class="grid w-[280px] gap-1 overflow-y-auto {backdrop
-			? 'border-r bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/20'
-			: ''}"
+		class="grid h-full w-full gap-1 overflow-scroll {mobile
+			? ''
+			: 'border-r bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/20'}"
 	>
-		<div class="space-y-4 overflow-y-auto p-4 pb-20">
+		<div class="space-y-4 overflow-y-scroll p-4">
 			{#each submenu as segment, i (i)}
 				{#if segment.tile == currentTile}
 					<!-- Title -->

@@ -12,8 +12,8 @@
 	import LabelItem from './LabelItem.svelte';
 </script>
 
-<div class="flex h-full flex-col">
-	<div class="pb-2 pt-2">
+<div class="flex h-full flex-col overflow-scroll">
+	<div class="p-2">
 		{#if $data.views.length > 0}
 			<div class="flex items-center justify-between">
 				<h2 class="h2">{$data.current + 1}. {$data.views[$data.current].type.toString()}</h2>
@@ -23,10 +23,10 @@
 							bind:text={$data.views[$data.current].data.back_function}
 							label="Back Button Event"
 							description={`Define here your custom/generic event: <code class="code">none</code>,
-								<code class="code">next</code>, <code class="code">back</code>
-								or
-								<code class="code">close</code>. The Back Button Event will be triggered when
-								the back button is pressed.`}
+									<code class="code">next</code>, <code class="code">back</code>
+									or
+									<code class="code">close</code>. The Back Button Event will be triggered when
+									the back button is pressed.`}
 							let:dialog
 						>
 							<Button builders={[tooltip, dialog]} variant="outline" size="icon"
@@ -42,11 +42,11 @@
 		{/if}
 	</div>
 
-	<div class="flex h-full flex-col justify-between gap-2">
+	<div class="flex h-full flex-col justify-between gap-2 px-2">
 		{#if $data.views[$data.current]?.type == GuiType.Message}
 			<LabelItem bind:label={$data.views[$data.current].data.header} type="Header" />
 			<LabelItem bind:label={$data.views[$data.current].data.text} type="Text" />
-			<div class="grid w-full grid-cols-3 gap-2">
+			<div class="grid w-full grid-cols-3 gap-2 pb-2">
 				{#each $data.views[$data.current]?.data.buttons as event}
 					<Card.Root class="w-full {!event ? 'opacity-50' : ''}">
 						<Card.Header>
@@ -123,35 +123,37 @@
 					</div>
 				</Card.Content>
 			</Card.Root>
-			<Card.Root class="w-full pt-1">
-				<Card.Header>
-					<Card.Title>
-						<div class="flex items-center justify-between">
-							<span class="items-center truncate pb-1">
-								Button
-								{#if $data.views[$data.current].data && $data.views[$data.current].data.function}
-									<Badge>{$data.views[$data.current].data.function}</Badge>
-								{/if}
-							</span>
-							<TextDialog
-								bind:text={$data.views[$data.current].data.function}
-								label="Button Event"
-								description={`Define here your button text and custom/generic event: <code class="code">none</code>,
-								<code class="code">next</code>, <code class="code">back</code>
-								or
-								<code class="code">close</code>. The Button Event will be triggered when the Ok/Middle button is
-								pressed.`}
-								let:dialog
-							>
-								<Button size="icon" variant="ghost" builders={[dialog]}>
-									<Pencil class="h-4 w-4" />
-								</Button>
-							</TextDialog>
-						</div>
-					</Card.Title>
-				</Card.Header>
-				<Card.Content>Ok</Card.Content>
-			</Card.Root>
+			<div class="pb-2">
+				<Card.Root class="w-full pt-1">
+					<Card.Header>
+						<Card.Title>
+							<div class="flex items-center justify-between">
+								<span class="items-center truncate pb-1">
+									Button
+									{#if $data.views[$data.current].data && $data.views[$data.current].data.function}
+										<Badge>{$data.views[$data.current].data.function}</Badge>
+									{/if}
+								</span>
+								<TextDialog
+									bind:text={$data.views[$data.current].data.function}
+									label="Button Event"
+									description={`Define here your button text and custom/generic event: <code class="code">none</code>,
+										<code class="code">next</code>, <code class="code">back</code>
+										or
+										<code class="code">close</code>. The Button Event will be triggered when the Ok/Middle button is
+										pressed.`}
+									let:dialog
+								>
+									<Button size="icon" variant="ghost" builders={[dialog]}>
+										<Pencil class="h-4 w-4" />
+									</Button>
+								</TextDialog>
+							</div>
+						</Card.Title>
+					</Card.Header>
+					<Card.Content>Ok</Card.Content>
+				</Card.Root>
+			</div>
 		{:else if $data.views.length > 0}
 			<Alert.Root variant="destructive">
 				<CircleAlert class="h-4 w-4" />
