@@ -56,6 +56,10 @@
 							: 'text-foreground/60'} transition-colors hover:text-foreground/80">Builder</a
 					>
 					<a
+						href="https://nwrenger.dev/privacy-policy"
+						class="text-foreground/60 transition-colors hover:text-foreground/80">Privacy Policy</a
+					>
+					<a
 						href="https://github.com/flip-ui"
 						target="_blank"
 						class="text-foreground/60 transition-colors hover:text-foreground/80">Github</a
