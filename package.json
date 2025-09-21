@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"postbuild": "bunx svelte-sitemap -d https://flip.nwrenger.dev -i '404.html' -c weekly -r",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -15,18 +16,19 @@
 		"@sveltejs/adapter-auto": "^3.2.4",
 		"@sveltejs/kit": "^2.5.24",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
+		"@tailwindcss/typography": "^0.5.14",
+		"autoprefixer": "^10.4.20",
+		"postcss": "^8.4.41",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.6",
+		"prettier-plugin-tailwindcss": "^0.5.14",
 		"svelte": "^4.2.19",
 		"svelte-check": "^3.8.6",
+		"svelte-sitemap": "^2.7.1",
+		"tailwindcss": "^3.4.10",
 		"tslib": "^2.7.0",
 		"typescript": "^5.5.4",
-		"vite": "^5.4.2",
-		"tailwindcss": "^3.4.10",
-		"postcss": "^8.4.41",
-		"autoprefixer": "^10.4.20",
-		"@tailwindcss/typography": "^0.5.14",
-		"prettier-plugin-tailwindcss": "^0.5.14"
+		"vite": "^5.4.2"
 	},
 	"type": "module",
 	"dependencies": {
