@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Disallow:
+
+Sitemap: https://flip.nwrenger.dev/sitemap.xml
+Host: flip.nwrenger.dev
